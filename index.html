@@ -1,7 +1,168 @@
 <html>
-<head>
+	<head>
+		<title>VaidikaBharata.org</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale=1>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	</head>
+	<style>
+	.margin-left {
+		margin-left: 20px;
+	}
+	.result-message {
+		display: inline-block;
+		margin-top: 20px;
+	}
+    </style>
 	<body>
-		Welcome to vaidikabharata.github.io
+		<div id="app">
+			<div class="container panel panel-default">
+				<div class="panel-heading">
+					<p>Select the option related to following term:</p>
+					<b>{{testQuestion}}</b>
+				</div>
+				<div class="panel-body">
+					<div v-for="options in testOptions">
+						<p><input 
+							type="radio" @click="answerMe(options)" 
+							v-model="selected" 
+							:value="options" 
+							name="optionGroup"><span class="margin-left">{{options}}</span>
+						</p>
+					</div>
+					<div class="row container col-xs-12">
+						<button class="btn btn-primary col-xs-2" 
+								@click="testClick()"
+								:disabled="!answeredOption"
+						>Test</button>
+						<div class="col-xs-1"></div>
+						<button class="btn btn-default col-xs-2 margin-left" 
+								@click="buttonClick()"
+						>Next</button>
+					</div>
+					
+					<div class="row container-fluid">
+						<p class="result-message">{{testResult}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			var app = new Vue({
+						el: '#app',
+						data: {
+							    testArray: [],
+							    testQuestion: '',
+							    testNumber: 0,
+							    testOptions: [],
+							    testResult:'',
+							    answeredOption: '',
+							    selected: false,
+								aikiKihonHappo: [
+											[
+												"Ikkyo, first lesson",
+												"Muso Dori",
+												"Incomparable Catch",
+												"Enter or close the distance"
+											],
+											[
+												"Nikyo, second lesson",
+												"Hong Gyaku",
+												"Base Reversal",
+												"Set them up"
+
+											],
+											[
+												"Sankyo, third lesson",
+												"Take Ori",
+												"Breaking Bamboo",
+												"To go around the problem."
+
+											],
+											[
+												"Yonkyo, fourth lesson",
+												"Kunuki",
+												"Bolt lock",
+												"Pain with indifference"
+
+											],
+											[
+												"Gokyo, fifth lesson",
+												"Omate Musha Dori",
+												"Obvious Warrior Catch ",
+												"Strike in every technique"
+
+											],
+											[
+												"Rokkyo, sixth lesson",
+												"Ura Musha Dori",
+												"Not so obvious warrior catch",
+												"Lead or guide your opponent"
+
+											],
+											[
+												"Nanakyo, seventh lesson",
+												"Shiho Nage",
+												"Four directional throw",
+												"Become skin tight"
+
+											],
+											[
+												"Hachikyo, eigth lesson",
+												"Irmi Nage",
+												"Entering throw",
+												"Become the center"
+
+											]]},
+							  mounted() {
+							  		this.buttonClick();
+							  	},
+							  methods: {
+							  	buttonClick() {
+							  		let i = 0, j=0;
+							  		this.testOptions = [];
+							  		this.answeredOption = '';
+							  		this.testResult = '';
+							  		this.selected = false;
+
+							  		let testArrayIndex = Math.floor(Math.random() * 8);
+							  		this.testArray = this.aikiKihonHappo[testArrayIndex];
+							  		this.testQuestion = this.testArray[Math.floor(Math.random() * 4)];
+							  		this.testAnswer = this.testArray.filter(qn => qn !== this.testQuestion)[Math.floor(Math.random() * 3)];
+							  		this.testOptions[Math.floor(Math.random() * 3)] = this.testAnswer;
+							  		
+
+							  		while(i<2){
+							  			let optionArrayIndex = Math.floor(Math.random() * 8);
+							  			let option = this.aikiKihonHappo[Math.floor(Math.random() * 8)][Math.floor(Math.random() * 4)];
+							  			if(this.testOptions.indexOf(option) === -1 && option != this.testQuestion && optionArrayIndex != testArrayIndex) {
+							  				if(this.testOptions[j]) {
+							  					j++;
+							  				} 
+							  				this.testOptions[j] = option;
+							  				j++;
+							  				i++;
+							  			}
+							  			
+							  		}
+							  	},
+							  	testClick() {
+							  		if(this.answeredOption === this.testAnswer) {
+							  			this.testResult = "Correct answer!"
+							  		} else {
+							  			this.testResult = "Wrong answer!"
+							  		}
+							  	},
+							  	answerMe(value) {
+							  		this.answeredOption = value;
+							  		console.log('this.selected', this.selected);
+							  	}
+							  }
+			});
+
+		</script>
 	</body>
 </html>
